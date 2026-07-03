@@ -12,7 +12,8 @@ COPY src/ src/
 RUN mvn clean package -DskipTests -B
 
 # Stage 2: run on GlassFish 8 (Jakarta EE 11 / Servlet 6.1 — the assignment's mandated stack)
-FROM eclipse-temurin:21-jre
+# Needs the full JDK, not just a JRE: GlassFish compiles JSPs to servlets with javac at request time.
+FROM eclipse-temurin:21-jdk
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip curl \
