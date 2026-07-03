@@ -1,7 +1,7 @@
 # SpeakOut — CSC584 Enterprise Programming (Group 3)
 
 Anonymized school bullying reporting and case tracking. JSP + JSTL views, Servlet controllers,
-JavaBean/DAO model, PostgreSQL, GlassFish 8. Spec: `FABLE_BUILD_PROMPT.md`.
+JavaBean/DAO model, PostgreSQL, GlassFish 8.
 
 ## Run it
 
