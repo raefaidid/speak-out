@@ -12,9 +12,12 @@ import java.util.Properties;
  * using Class.forName + DriverManager).
  *
  * One deviation from the lecture example: instead of hardcoding the URL and
- * credentials, they are read once from src/main/resources/db.properties so
- * each group member can point at their own local PostgreSQL without editing
- * Java code. DAOs must use try-with-resources so connections always close.
+ * credentials, they are resolved once at startup from DB_URL/DB_USER/DB_PASSWORD
+ * environment variables, falling back to src/main/resources/db.properties when
+ * those aren't set — so each group member can still point at their own local
+ * PostgreSQL without editing Java code, while a deployed server can be
+ * configured purely through env vars. DAOs must use try-with-resources so
+ * connections always close.
  */
 public final class DBConnection {
 
@@ -25,16 +28,19 @@ public final class DBConnection {
     static {
         Properties props = new Properties();
         try (InputStream in = DBConnection.class.getClassLoader().getResourceAsStream("db.properties")) {
-            if (in == null) {
-                throw new IllegalStateException("db.properties not found on classpath");
+            if (in != null) {
+                props.load(in);
             }
-            props.load(in);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to load db.properties", e);
         }
-        URL = props.getProperty("db.url");
-        USER = props.getProperty("db.user");
-        PASSWORD = props.getProperty("db.password", "");
+        URL = System.getenv().getOrDefault("DB_URL", props.getProperty("db.url"));
+        USER = System.getenv().getOrDefault("DB_USER", props.getProperty("db.user"));
+        PASSWORD = System.getenv().getOrDefault("DB_PASSWORD", props.getProperty("db.password", ""));
+        if (URL == null || USER == null) {
+            throw new IllegalStateException(
+                "Database not configured: set DB_URL/DB_USER env vars or provide db.properties");
+        }
     }
 
     private DBConnection() {
