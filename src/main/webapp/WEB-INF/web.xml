@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Deployment descriptor (Chapter 8): every servlet is declared with an internal
+  <servlet-name> mapped to the URL the client sees, so the real class name is
+  never exposed in the browser. No @WebServlet annotations are used.
+-->
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
+         version="6.1">
+
+  <display-name>SpeakOut</display-name>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <session-config>
+    <session-timeout>30</session-timeout>
+    <cookie-config>
+      <http-only>true</http-only>
+    </cookie-config>
+  </session-config>
+
+  <!-- Filter: session gate for every page except the public ones -->
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.speakout.controller.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Authentication -->
+  <servlet>
+    <servlet-name>Login</servlet-name>
+    <servlet-class>com.speakout.controller.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>com.speakout.controller.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Register</servlet-name>
+    <servlet-class>com.speakout.controller.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Register</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+
+  <!-- Student flow -->
+  <servlet>
+    <servlet-name>Dashboard</servlet-name>
+    <servlet-class>com.speakout.controller.DashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Dashboard</servlet-name>
+    <url-pattern>/dashboard</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReportForm</servlet-name>
+    <servlet-class>com.speakout.controller.ReportFormServlet</servlet-class>
+    <multipart-config>
+      <max-file-size>52428800</max-file-size>        <!-- 50MB per file -->
+      <max-request-size>209715200</max-request-size> <!-- 200MB per request -->
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportForm</servlet-name>
+    <url-pattern>/report/new</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReportEdit</servlet-name>
+    <servlet-class>com.speakout.controller.ReportEditServlet</servlet-class>
+    <multipart-config>
+      <max-file-size>52428800</max-file-size>
+      <max-request-size>209715200</max-request-size>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportEdit</servlet-name>
+    <url-pattern>/report/edit</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReportDelete</servlet-name>
+    <servlet-class>com.speakout.controller.ReportDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportDelete</servlet-name>
+    <url-pattern>/report/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>MyReports</servlet-name>
+    <servlet-class>com.speakout.controller.MyReportsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MyReports</servlet-name>
+    <url-pattern>/reports</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReportView</servlet-name>
+    <servlet-class>com.speakout.controller.ReportViewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportView</servlet-name>
+    <url-pattern>/report</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Profile</servlet-name>
+    <servlet-class>com.speakout.controller.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Profile</servlet-name>
+    <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Evidence</servlet-name>
+    <servlet-class>com.speakout.controller.EvidenceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Evidence</servlet-name>
+    <url-pattern>/evidence</url-pattern>
+  </servlet-mapping>
+
+  <!-- Teacher / Admin flow -->
+  <servlet>
+    <servlet-name>Cases</servlet-name>
+    <servlet-class>com.speakout.controller.CasesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Cases</servlet-name>
+    <url-pattern>/cases</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CaseDetail</servlet-name>
+    <servlet-class>com.speakout.controller.CaseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaseDetail</servlet-name>
+    <url-pattern>/case</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CaseStatus</servlet-name>
+    <servlet-class>com.speakout.controller.CaseStatusServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaseStatus</servlet-name>
+    <url-pattern>/case/status</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CaseNote</servlet-name>
+    <servlet-class>com.speakout.controller.CaseNoteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaseNote</servlet-name>
+    <url-pattern>/case/note</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CaseHandler</servlet-name>
+    <servlet-class>com.speakout.controller.CaseHandlerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaseHandler</servlet-name>
+    <url-pattern>/case/handler</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CaseDelete</servlet-name>
+    <servlet-class>com.speakout.controller.CaseDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaseDelete</servlet-name>
+    <url-pattern>/case/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Analytics</servlet-name>
+    <servlet-class>com.speakout.controller.AnalyticsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Analytics</servlet-name>
+    <url-pattern>/analytics</url-pattern>
+  </servlet-mapping>
+
+  <!-- Dev smoke test -->
+  <servlet>
+    <servlet-name>Health</servlet-name>
+    <servlet-class>com.speakout.controller.HealthServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Health</servlet-name>
+    <url-pattern>/health</url-pattern>
+  </servlet-mapping>
+</web-app>

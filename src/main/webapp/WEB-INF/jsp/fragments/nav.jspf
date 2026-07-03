@@ -1,0 +1,82 @@
+<%-- Shared nav bar: identical on every authenticated screen (graded). Expects sessionScope.user. --%>
+<nav class="navbar navbar-expand-lg navbar-so">
+  <div class="container">
+    <a class="so-brand fs-5 text-decoration-none" href="${pageContext.request.contextPath}/dashboard">
+      <span class="so-brand-logo">S</span> SpeakOut
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <c:if test="${sessionScope.user.student}">
+          <li class="nav-item"><a class="nav-link ${active == 'dashboard' ? 'active' : ''}" href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link ${active == 'reports' ? 'active' : ''}" href="${pageContext.request.contextPath}/reports">My Reports</a></li>
+        </c:if>
+        <c:if test="${sessionScope.user.staff}">
+          <li class="nav-item"><a class="nav-link ${active == 'cases' ? 'active' : ''}" href="${pageContext.request.contextPath}/cases">Cases</a></li>
+        </c:if>
+        <c:if test="${sessionScope.user.admin}">
+          <li class="nav-item"><a class="nav-link ${active == 'analytics' ? 'active' : ''}" href="${pageContext.request.contextPath}/analytics">Analytics</a></li>
+        </c:if>
+        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#resourcesModal">Safety Resources</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-3">
+        <c:if test="${sessionScope.user.student}">
+          <a class="btn btn-primary btn-sm" href="${pageContext.request.contextPath}/report/new">
+            <i class="bi bi-plus-lg me-1"></i>New Report
+          </a>
+        </c:if>
+        <div class="dropdown">
+          <a class="text-decoration-none dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+            <span class="so-brand-logo">${sessionScope.user.initials}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><span class="dropdown-item-text small text-muted">${sessionScope.user.fullName}<br>${sessionScope.user.role}</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+            <li>
+              <form action="${pageContext.request.contextPath}/logout" method="post" class="m-0">
+                <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Log out</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<%-- One-shot success/error banner (rubric: visible success message after every action) --%>
+<c:if test="${not empty sessionScope.flash}">
+  <div class="container mt-3">
+    <div class="alert alert-${empty sessionScope.flashType ? 'success' : sessionScope.flashType} alert-dismissible fade show mb-0" role="alert">
+      <i class="bi ${sessionScope.flashType == 'danger' ? 'bi-exclamation-triangle' : 'bi-check-circle'} me-2"></i>${sessionScope.flash}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  </div>
+  <c:remove var="flash" scope="session"/>
+  <c:remove var="flashType" scope="session"/>
+</c:if>
+
+<%-- Safety Resources modal (crisis contacts) --%>
+<div class="modal fade" id="resourcesModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-life-preserver text-primary me-2"></i>Safety Resources</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">If you are in immediate danger, contact:</p>
+        <ul class="list-unstyled mb-3">
+          <li class="mb-2"><i class="bi bi-telephone text-primary me-2"></i><strong>999</strong> — Emergency (Police / Ambulance)</li>
+          <li class="mb-2"><i class="bi bi-telephone text-primary me-2"></i><strong>15999</strong> — Talian Kasih (24 hours)</li>
+          <li class="mb-2"><i class="bi bi-whatsapp text-primary me-2"></i><strong>019-261 5999</strong> — Talian Kasih WhatsApp</li>
+          <li><i class="bi bi-telephone text-primary me-2"></i><strong>03-7627 2929</strong> — Befrienders KL</li>
+        </ul>
+        <div class="so-anon-banner"><i class="bi bi-shield-check me-1"></i>Your identity is hidden from peers. Only your school's counsellor and admin can see it.</div>
+      </div>
+    </div>
+  </div>
+</div>

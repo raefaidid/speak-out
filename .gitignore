@@ -1,0 +1,31 @@
+# Maven build output
+target/
+
+# Per-developer local DB config (see db.properties.example)
+src/main/resources/db.properties
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+nbproject/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# GlassFish domain state (if a local domain dir ever ends up under the repo)
+glassfish/domains/*/logs/
+glassfish/domains/*/generated/
+glassfish/domains/*/osgi-cache/
