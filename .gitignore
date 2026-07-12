@@ -29,3 +29,6 @@ Thumbs.db
 glassfish/domains/*/logs/
 glassfish/domains/*/generated/
 glassfish/domains/*/osgi-cache/
+
+# Specifics
+*FABLE*
